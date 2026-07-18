@@ -200,4 +200,50 @@ public class HotelReservationTest {
                 "Ridgewood, Rating: 5 and Total Rates: $140",
                 result);
     }
+
+
+    /**
+     * Tests whether the cheapest best-rated hotel
+     * is returned for a Regular customer.
+     */
+    @Test
+    public void givenRegularCustomer_WhenFindingCheapestBestRatedHotel_ShouldReturnBridgewood() {
+
+        HotelReservationService service = new HotelReservationService();
+
+        service.addHotel(new Hotel(
+                "Lakewood",
+                110,
+                90,
+                80,
+                80,
+                3));
+
+        service.addHotel(new Hotel(
+                "Bridgewood",
+                150,
+                50,
+                110,
+                50,
+                4));
+
+        service.addHotel(new Hotel(
+                "Ridgewood",
+                220,
+                150,
+                100,
+                40,
+                5));
+
+        String result = service.findCheapestBestRatedHotel(
+                CustomerType.REGULAR,
+                LocalDate.of(2020, 9, 11),
+                LocalDate.of(2020, 9, 12)
+        );
+
+        assertEquals(
+                "Bridgewood, Rating: 4 and Total Rates: $200",
+                result
+        );
+    }
 }

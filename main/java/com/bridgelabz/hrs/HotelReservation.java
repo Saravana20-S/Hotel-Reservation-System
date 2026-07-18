@@ -19,13 +19,12 @@ public class HotelReservation {
 
         // Add hotels with regular rates, reward rates and rating
         String result = service.findCheapestBestRatedHotel(
-                CustomerType.REWARD,
+                CustomerType.REGULAR,
                 LocalDate.of(2020, 9, 11),
                 LocalDate.of(2020, 9, 12)
         );
 
         System.out.println(result);
 
-        System.out.println(result);
     }
 }
