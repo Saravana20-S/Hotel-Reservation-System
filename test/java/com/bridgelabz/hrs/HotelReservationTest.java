@@ -109,4 +109,23 @@ public class HotelReservationTest {
 
         assertEquals("Ridgewood, Rating: 5", result);
     }
+
+    /**
+     * Tests whether reward customer rates
+     * are stored correctly.
+     */
+    @Test
+    public void givenRewardRates_WhenHotelCreated_ShouldReturnRewardRates() {
+
+        Hotel hotel = new Hotel(
+                "Lakewood",
+                110,
+                90,
+                80,
+                80,
+                3);
+
+        assertEquals(80, hotel.getRewardWeekdayRate());
+        assertEquals(80, hotel.getRewardWeekendRate());
+    }
 }

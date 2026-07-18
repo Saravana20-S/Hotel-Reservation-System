@@ -18,6 +18,12 @@ public class Hotel {
     // Hotel rating
     private int rating;
 
+    // Reward customer weekday rate
+    private int rewardWeekdayRate;
+
+    // Reward customer weekend rate
+    private int rewardWeekendRate;
+
 
     public Hotel(String hotelName, int weekdayRate, int weekendRate) {
         this.hotelName = hotelName;
@@ -38,6 +44,32 @@ public class Hotel {
         this.hotelName = hotelName;
         this.weekdayRate = weekdayRate;
         this.weekendRate = weekendRate;
+        this.rating = rating;
+    }
+
+
+    /**
+     * Creates a Hotel object.
+     *
+     * @param hotelName Hotel name
+     * @param weekdayRate Regular weekday rate
+     * @param weekendRate Regular weekend rate
+     * @param rewardWeekdayRate Reward weekday rate
+     * @param rewardWeekendRate Reward weekend rate
+     * @param rating Hotel rating
+     */
+    public Hotel(String hotelName,
+                 int weekdayRate,
+                 int weekendRate,
+                 int rewardWeekdayRate,
+                 int rewardWeekendRate,
+                 int rating) {
+
+        this.hotelName = hotelName;
+        this.weekdayRate = weekdayRate;
+        this.weekendRate = weekendRate;
+        this.rewardWeekdayRate = rewardWeekdayRate;
+        this.rewardWeekendRate = rewardWeekendRate;
         this.rating = rating;
     }
 
@@ -75,5 +107,24 @@ public class Hotel {
      */
     public int getRating() {
         return rating;
+    }
+
+
+    /**
+     * Returns reward customer weekday rate.
+     *
+     * @return reward weekday rate
+     */
+    public int getRewardWeekdayRate() {
+        return rewardWeekdayRate;
+    }
+
+    /**
+     * Returns reward customer weekend rate.
+     *
+     * @return reward weekend rate
+     */
+    public int getRewardWeekendRate() {
+        return rewardWeekendRate;
     }
 }
