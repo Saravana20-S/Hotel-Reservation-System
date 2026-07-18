@@ -27,23 +27,23 @@ public class HotelReservationService {
 
     /**
      * Finds the cheapest hotel for the given reservation dates.
-     * If multiple hotels have the same minimum cost,
-     * all of them are returned.
+     * If multiple hotels have the same total cost,
+     * the hotel with the highest rating is returned.
      *
      * @param dates Reservation dates
-     * @return Cheapest hotel(s) with total cost
+     * @return Cheapest best-rated hotel with rating and total cost
      */
     public String findCheapestHotel(LocalDate... dates) {
 
+        Hotel cheapestHotel = null;
         int minimumCost = Integer.MAX_VALUE;
-        List<String> cheapestHotels = new ArrayList<>();
 
         // Iterate through every hotel
         for (Hotel hotel : hotelList) {
 
             int totalCost = 0;
 
-            // Calculate total cost for the given dates
+            // Calculate total cost
             for (LocalDate date : dates) {
 
                 DayOfWeek day = date.getDayOfWeek();
@@ -62,19 +62,21 @@ public class HotelReservationService {
             if (totalCost < minimumCost) {
 
                 minimumCost = totalCost;
-                cheapestHotels.clear();
-                cheapestHotels.add(hotel.getHotelName());
-
+                cheapestHotel = hotel;
             }
-            // Same minimum cost
-            else if (totalCost == minimumCost) {
 
-                cheapestHotels.add(hotel.getHotelName());
+            // If cost is same, choose hotel with higher rating
+            else if (totalCost == minimumCost &&
+                    hotel.getRating() > cheapestHotel.getRating()) {
 
+                cheapestHotel = hotel;
             }
         }
 
-        return String.join(" and ", cheapestHotels)
-                + ", Total Rates: $" + minimumCost;
+        return cheapestHotel.getHotelName()
+                + ", Rating: "
+                + cheapestHotel.getRating()
+                + " and Total Rates: $"
+                + minimumCost;
     }
 }

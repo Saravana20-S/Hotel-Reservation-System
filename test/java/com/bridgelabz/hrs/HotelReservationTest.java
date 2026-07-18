@@ -63,4 +63,29 @@ public class HotelReservationTest {
         assertEquals(90, hotel.getWeekendRate());
         assertEquals(3, hotel.getRating());
     }
+
+
+    /**
+     * Tests whether the cheapest hotel with the
+     * highest rating is returned when costs are equal.
+     */
+    @Test
+    public void givenDateRange_WhenHotelsHaveSameCost_ShouldReturnHighestRatedHotel() {
+
+        HotelReservationService service = new HotelReservationService();
+
+        service.addHotel(new Hotel("Lakewood", 110, 90, 3));
+        service.addHotel(new Hotel("Bridgewood", 150, 50, 4));
+        service.addHotel(new Hotel("Ridgewood", 220, 150, 5));
+
+        String result = service.findCheapestHotel(
+                LocalDate.of(2020, 9, 11),
+                LocalDate.of(2020, 9, 12)
+        );
+
+        assertEquals(
+                "Bridgewood, Rating: 4 and Total Rates: $200",
+                result
+        );
+    }
 }
