@@ -24,44 +24,57 @@ public class HotelReservationService {
         hotelList.add(hotel);
     }
 
+
     /**
-     * Finds the cheapest hotel for the given dates.
+     * Finds the cheapest hotel for the given reservation dates.
+     * If multiple hotels have the same minimum cost,
+     * all of them are returned.
      *
      * @param dates Reservation dates
-     * @return Cheapest hotel with total cost
+     * @return Cheapest hotel(s) with total cost
      */
     public String findCheapestHotel(LocalDate... dates) {
 
-        Hotel cheapestHotel = null;
         int minimumCost = Integer.MAX_VALUE;
+        List<String> cheapestHotels = new ArrayList<>();
 
-        // Calculate total cost for every hotel
+        // Iterate through every hotel
         for (Hotel hotel : hotelList) {
 
             int totalCost = 0;
 
+            // Calculate total cost for the given dates
             for (LocalDate date : dates) {
 
-                // Check whether the date is weekend
-                if (date.getDayOfWeek() == DayOfWeek.SATURDAY
-                        || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                DayOfWeek day = date.getDayOfWeek();
 
+                // Weekend
+                if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
                     totalCost += hotel.getWeekendRate();
-
-                } else {
-
+                }
+                // Weekday
+                else {
                     totalCost += hotel.getWeekdayRate();
-
                 }
             }
 
-            // Update cheapest hotel
+            // Found a cheaper hotel
             if (totalCost < minimumCost) {
+
                 minimumCost = totalCost;
-                cheapestHotel = hotel;
+                cheapestHotels.clear();
+                cheapestHotels.add(hotel.getHotelName());
+
+            }
+            // Same minimum cost
+            else if (totalCost == minimumCost) {
+
+                cheapestHotels.add(hotel.getHotelName());
+
             }
         }
 
-        return cheapestHotel.getHotelName() + ", Total Rates: $" + minimumCost;
+        return String.join(" and ", cheapestHotels)
+                + ", Total Rates: $" + minimumCost;
     }
 }

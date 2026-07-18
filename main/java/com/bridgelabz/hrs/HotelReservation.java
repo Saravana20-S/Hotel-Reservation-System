@@ -22,8 +22,8 @@ public class HotelReservation {
         service.addHotel(new Hotel("Ridgewood", 220, 150));
 
         String result = service.findCheapestHotel(
-                LocalDate.of(2020, 9, 10),
-                LocalDate.of(2020, 9, 11)
+                LocalDate.of(2020, 9, 11),
+                LocalDate.of(2020, 9, 12)
         );
 
         System.out.println(result);
