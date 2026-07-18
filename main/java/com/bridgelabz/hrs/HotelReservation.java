@@ -17,9 +17,10 @@ public class HotelReservation {
         HotelReservationService service = new HotelReservationService();
 
         // Add hotels with weekday and weekend rates
-        service.addHotel(new Hotel("Lakewood", 110, 90));
-        service.addHotel(new Hotel("Bridgewood", 150, 50));
-        service.addHotel(new Hotel("Ridgewood", 220, 150));
+        // Add hotels with weekday rate, weekend rate and rating
+        service.addHotel(new Hotel("Lakewood", 110, 90, 3));
+        service.addHotel(new Hotel("Bridgewood", 150, 50, 4));
+        service.addHotel(new Hotel("Ridgewood", 220, 150, 5));
 
         String result = service.findCheapestHotel(
                 LocalDate.of(2020, 9, 11),

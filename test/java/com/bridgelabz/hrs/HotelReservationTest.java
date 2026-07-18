@@ -49,4 +49,18 @@ public class HotelReservationTest {
                 result
         );
     }
+
+    /**
+     * Tests whether the hotel rating is stored correctly.
+     */
+    @Test
+    public void givenHotelRating_WhenHotelCreated_ShouldReturnCorrectRating() {
+
+        Hotel hotel = new Hotel("Lakewood", 110, 90, 3);
+
+        assertEquals("Lakewood", hotel.getHotelName());
+        assertEquals(110, hotel.getWeekdayRate());
+        assertEquals(90, hotel.getWeekendRate());
+        assertEquals(3, hotel.getRating());
+    }
 }
