@@ -1,5 +1,6 @@
 package com.bridgelabz.hrs;
 
+import com.bridgelabz.hrs.model.CustomerType;
 import com.bridgelabz.hrs.model.Hotel;
 import com.bridgelabz.hrs.service.HotelReservationService;
 
@@ -17,33 +18,13 @@ public class HotelReservation {
         HotelReservationService service = new HotelReservationService();
 
         // Add hotels with regular rates, reward rates and rating
-        service.addHotel(new Hotel(
-                "Lakewood",
-                110,
-                90,
-                80,
-                80,
-                3));
-
-        service.addHotel(new Hotel(
-                "Bridgewood",
-                150,
-                50,
-                110,
-                50,
-                4));
-
-        service.addHotel(new Hotel(
-                "Ridgewood",
-                220,
-                150,
-                100,
-                40,
-                5));
-        String result = service.findBestRatedHotel(
+        String result = service.findCheapestBestRatedHotel(
+                CustomerType.REWARD,
                 LocalDate.of(2020, 9, 11),
                 LocalDate.of(2020, 9, 12)
         );
+
+        System.out.println(result);
 
         System.out.println(result);
     }

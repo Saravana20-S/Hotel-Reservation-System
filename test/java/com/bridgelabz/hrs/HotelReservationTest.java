@@ -1,5 +1,7 @@
 package com.bridgelabz.hrs;
 
+import com.bridgelabz.hrs.exception.HotelReservationException;
+import com.bridgelabz.hrs.model.CustomerType;
 import com.bridgelabz.hrs.model.Hotel;
 import com.bridgelabz.hrs.service.HotelReservationService;
 import org.junit.jupiter.api.Test;
@@ -7,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test class for Hotel.
@@ -128,4 +131,52 @@ public class HotelReservationTest {
         assertEquals(80, hotel.getRewardWeekdayRate());
         assertEquals(80, hotel.getRewardWeekendRate());
     }
+
+
+
+    @Test
+    public void givenRewardCustomer_WhenFindingCheapestHotel_ShouldReturnRidgewood() {
+
+        HotelReservationService service = new HotelReservationService();
+
+        service.addHotel(new Hotel("Lakewood",110,90,80,80,3));
+        service.addHotel(new Hotel("Bridgewood",150,50,110,50,4));
+        service.addHotel(new Hotel("Ridgewood",220,150,100,40,5));
+
+        String result = service.findCheapestBestRatedHotel(
+                CustomerType.REWARD,
+                LocalDate.of(2020,9,11),
+                LocalDate.of(2020,9,12));
+
+        assertEquals(
+                "Ridgewood, Rating: 5 and Total Rates: $140",
+                result);
+    }
+
+
+    @Test
+    public void givenNullCustomerType_ShouldThrowException() {
+
+        HotelReservationService service = new HotelReservationService();
+
+        assertThrows(
+                HotelReservationException.class,
+                () -> service.findCheapestBestRatedHotel(
+                        null,
+                        LocalDate.of(2020,9,11))
+        );
+    }
+
+
+    @Test
+    public void givenNoDates_ShouldThrowException() {
+
+        HotelReservationService service = new HotelReservationService();
+
+        assertThrows(
+                HotelReservationException.class,
+                () -> service.findCheapestBestRatedHotel(
+                        CustomerType.REWARD)
+        );
+    }   
 }

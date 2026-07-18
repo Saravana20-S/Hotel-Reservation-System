@@ -1,5 +1,7 @@
 package com.bridgelabz.hrs.service;
 
+import com.bridgelabz.hrs.exception.HotelReservationException;
+import com.bridgelabz.hrs.model.CustomerType;
 import com.bridgelabz.hrs.model.Hotel;
 
 import java.time.DayOfWeek;
@@ -107,5 +109,88 @@ public class HotelReservationService {
         return bestRatedHotel.getHotelName()
                 + ", Rating: "
                 + bestRatedHotel.getRating();
+    }
+
+
+    /**
+     * Finds the cheapest best-rated hotel
+     * for a Reward customer.
+     *
+     * @param customerType Customer type
+     * @param dates Reservation dates
+     * @return Cheapest best-rated hotel
+     */
+    public String findCheapestBestRatedHotel(CustomerType customerType,
+                                             LocalDate... dates) {
+
+        // Validate customer type
+        if (customerType == null) {
+            throw new HotelReservationException("Customer type cannot be null.");
+        }
+
+        // Validate dates
+        if (dates == null || dates.length == 0) {
+            throw new HotelReservationException("Please provide at least one reservation date.");
+        }
+
+        Hotel selectedHotel = null;
+        int minimumCost = Integer.MAX_VALUE;
+
+        for (Hotel hotel : hotelList) {
+
+            int totalCost = 0;
+
+            for (LocalDate date : dates) {
+
+                DayOfWeek day = date.getDayOfWeek();
+
+                if (customerType == CustomerType.REWARD) {
+
+                    // Reward customer rates
+                    if (day == DayOfWeek.SATURDAY ||
+                            day == DayOfWeek.SUNDAY) {
+
+                        totalCost += hotel.getRewardWeekendRate();
+
+                    } else {
+
+                        totalCost += hotel.getRewardWeekdayRate();
+                    }
+
+                } else {
+
+                    // Regular customer rates
+                    if (day == DayOfWeek.SATURDAY ||
+                            day == DayOfWeek.SUNDAY) {
+
+                        totalCost += hotel.getWeekendRate();
+
+                    } else {
+
+                        totalCost += hotel.getWeekdayRate();
+                    }
+                }
+            }
+
+            // Cheapest hotel
+            if (totalCost < minimumCost) {
+
+                minimumCost = totalCost;
+                selectedHotel = hotel;
+            }
+
+            // Tie -> Higher Rating
+            else if (totalCost == minimumCost &&
+                    hotel.getRating() > selectedHotel.getRating()) {
+
+                selectedHotel = hotel;
+            }
+        }
+
+        return selectedHotel.getHotelName()
+                + ", Rating: "
+                + selectedHotel.getRating()
+                + " and Total Rates: $"
+                + minimumCost;
     }
 }
