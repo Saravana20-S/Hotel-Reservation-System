@@ -26,6 +26,40 @@ public class HotelReservationService {
         hotelList.add(hotel);
     }
 
+    /**
+     * Calculates the total reservation cost.
+     *
+     * @param hotel Hotel
+     * @param customerType Customer type
+     * @param dates Reservation dates
+     * @return Total cost
+     */
+    private int calculateTotalCost(Hotel hotel,
+                                   CustomerType customerType,
+                                   LocalDate... dates) {
+
+        return java.util.Arrays.stream(dates)
+
+                .mapToInt(date -> {
+
+                    boolean isWeekend =
+                            date.getDayOfWeek() == DayOfWeek.SATURDAY
+                                    || date.getDayOfWeek() == DayOfWeek.SUNDAY;
+
+                    if (customerType == CustomerType.REWARD) {
+
+                        return isWeekend
+                                ? hotel.getRewardWeekendRate()
+                                : hotel.getRewardWeekdayRate();
+                    }
+
+                    return isWeekend
+                            ? hotel.getWeekendRate()
+                            : hotel.getWeekdayRate();
+                })
+
+                .sum();
+    }
 
     /**
      * Finds the cheapest hotel for the given reservation dates.
@@ -113,8 +147,8 @@ public class HotelReservationService {
 
 
     /**
-     * Finds the cheapest best-rated hotel
-     * for a Reward customer.
+     * Finds the cheapest best-rated hotel for the given customer type
+     * using Java Streams.
      *
      * @param customerType Customer type
      * @param dates Reservation dates
@@ -125,72 +159,64 @@ public class HotelReservationService {
 
         // Validate customer type
         if (customerType == null) {
-            throw new HotelReservationException("Customer type cannot be null.");
+            throw new HotelReservationException(
+                    HotelReservationException.ExceptionType.INVALID_CUSTOMER_TYPE,
+                    "Customer type cannot be null.");
         }
 
-        // Validate dates
+        // Validate date range
         if (dates == null || dates.length == 0) {
-            throw new HotelReservationException("Please provide at least one reservation date.");
+            throw new HotelReservationException(
+                    HotelReservationException.ExceptionType.INVALID_DATE_RANGE,
+                    "Please provide at least one reservation date.");
         }
 
-        Hotel selectedHotel = null;
-        int minimumCost = Integer.MAX_VALUE;
+        Hotel cheapestHotel = hotelList.stream()
 
-        for (Hotel hotel : hotelList) {
+                // Compare total cost
+                .min((hotel1, hotel2) -> {
 
-            int totalCost = 0;
+                    int hotel1Cost = calculateTotalCost(hotel1, customerType, dates);
+                    int hotel2Cost = calculateTotalCost(hotel2, customerType, dates);
 
-            for (LocalDate date : dates) {
-
-                DayOfWeek day = date.getDayOfWeek();
-
-                if (customerType == CustomerType.REWARD) {
-
-                    // Reward customer rates
-                    if (day == DayOfWeek.SATURDAY ||
-                            day == DayOfWeek.SUNDAY) {
-
-                        totalCost += hotel.getRewardWeekendRate();
-
-                    } else {
-
-                        totalCost += hotel.getRewardWeekdayRate();
+                    if (hotel1Cost == hotel2Cost) {
+                        // If costs are equal, compare ratings
+                        return Integer.compare(
+                                hotel2.getRating(),
+                                hotel1.getRating());
                     }
 
-                } else {
+                    return Integer.compare(hotel1Cost, hotel2Cost);
+                })
 
-                    // Regular customer rates
-                    if (day == DayOfWeek.SATURDAY ||
-                            day == DayOfWeek.SUNDAY) {
+                .orElseThrow(() ->
+                        new HotelReservationException(
+                                HotelReservationException.ExceptionType.INVALID_DATE_RANGE,
+                                "No hotels available."));
 
-                        totalCost += hotel.getWeekendRate();
+        int totalCost = calculateTotalCost(cheapestHotel, customerType, dates);
 
-                    } else {
-
-                        totalCost += hotel.getWeekdayRate();
-                    }
-                }
-            }
-
-            // Cheapest hotel
-            if (totalCost < minimumCost) {
-
-                minimumCost = totalCost;
-                selectedHotel = hotel;
-            }
-
-            // Tie -> Higher Rating
-            else if (totalCost == minimumCost &&
-                    hotel.getRating() > selectedHotel.getRating()) {
-
-                selectedHotel = hotel;
-            }
-        }
-
-        return selectedHotel.getHotelName()
+        return cheapestHotel.getHotelName()
                 + ", Rating: "
-                + selectedHotel.getRating()
+                + cheapestHotel.getRating()
                 + " and Total Rates: $"
-                + minimumCost;
+                + totalCost;
+    }
+
+
+    /**
+     * Validates the customer type.
+     *
+     * @param customerType Customer type
+     */
+    private void validateCustomerType(String customerType) {
+
+        if (customerType == null ||
+                !customerType.matches("^(REGULAR|REWARD)$")) {
+
+            throw new HotelReservationException(
+                    HotelReservationException.ExceptionType.INVALID_CUSTOMER_TYPE,
+                    "Invalid customer type.");
+        }
     }
 }

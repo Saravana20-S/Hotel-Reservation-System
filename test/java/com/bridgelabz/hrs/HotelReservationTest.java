@@ -133,7 +133,7 @@ public class HotelReservationTest {
     }
 
 
-
+//UC10
     @Test
     public void givenRewardCustomer_WhenFindingCheapestHotel_ShouldReturnRidgewood() {
 
@@ -178,5 +178,26 @@ public class HotelReservationTest {
                 () -> service.findCheapestBestRatedHotel(
                         CustomerType.REWARD)
         );
-    }   
+    }
+
+
+    //UC11
+    @Test
+    public void givenRewardCustomer_WhenFindingCheapestBestRatedHotel_ShouldReturnRidgewood() {
+
+        HotelReservationService service = new HotelReservationService();
+
+        service.addHotel(new Hotel("Lakewood",110,90,80,80,3));
+        service.addHotel(new Hotel("Bridgewood",150,50,110,50,4));
+        service.addHotel(new Hotel("Ridgewood",220,150,100,40,5));
+
+        String result = service.findCheapestBestRatedHotel(
+                CustomerType.REWARD,
+                LocalDate.of(2020,9,11),
+                LocalDate.of(2020,9,12));
+
+        assertEquals(
+                "Ridgewood, Rating: 5 and Total Rates: $140",
+                result);
+    }
 }
