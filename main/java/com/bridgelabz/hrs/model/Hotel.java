@@ -1,31 +1,31 @@
 package com.bridgelabz.hrs.model;
 
 /**
- * Represents a Hotel with its name and
- * rates for Regular customers.
+ * Represents a Hotel with weekday and weekend rates
+ * for a Regular customer.
  */
 public class Hotel {
 
     // Hotel name
     private String hotelName;
 
-    // Weekday rate for Regular customer
-    private int regularWeekdayRate;
+    // Regular customer weekday rate
+    private int weekdayRate;
 
-    // Weekend rate for Regular customer
-    private int regularWeekendRate;
+    // Regular customer weekend rate
+    private int weekendRate;
 
     /**
-     * Parameterized constructor to initialize hotel details.
+     * Creates a Hotel object.
      *
-     * @param hotelName Name of the hotel
-     * @param regularWeekdayRate Weekday rate for Regular customer
-     * @param regularWeekendRate Weekend rate for Regular customer
+     * @param hotelName Hotel name
+     * @param weekdayRate Weekday rate
+     * @param weekendRate Weekend rate
      */
-    public Hotel(String hotelName, int regularWeekdayRate, int regularWeekendRate) {
+    public Hotel(String hotelName, int weekdayRate, int weekendRate) {
         this.hotelName = hotelName;
-        this.regularWeekdayRate = regularWeekdayRate;
-        this.regularWeekendRate = regularWeekendRate;
+        this.weekdayRate = weekdayRate;
+        this.weekendRate = weekendRate;
     }
 
     /**
@@ -42,8 +42,8 @@ public class Hotel {
      *
      * @return weekday rate
      */
-    public int getRegularWeekdayRate() {
-        return regularWeekdayRate;
+    public int getWeekdayRate() {
+        return weekdayRate;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Hotel {
      *
      * @return weekend rate
      */
-    public int getRegularWeekendRate() {
-        return regularWeekendRate;
+    public int getWeekendRate() {
+        return weekendRate;
     }
 }

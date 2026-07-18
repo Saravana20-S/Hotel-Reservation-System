@@ -46,11 +46,11 @@ public class HotelReservationService {
                 if (date.getDayOfWeek() == DayOfWeek.SATURDAY
                         || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
 
-                    totalCost += hotel.getRegularWeekendRate();
+                    totalCost += hotel.getWeekendRate();
 
                 } else {
 
-                    totalCost += hotel.getRegularWeekdayRate();
+                    totalCost += hotel.getWeekdayRate();
 
                 }
             }
