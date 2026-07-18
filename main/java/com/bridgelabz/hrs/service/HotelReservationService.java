@@ -79,4 +79,33 @@ public class HotelReservationService {
                 + " and Total Rates: $"
                 + minimumCost;
     }
+
+
+    /**
+     * Finds the highest rated hotel.
+     * The dates are accepted as input to satisfy the use case,
+     * but only the hotel rating is considered.
+     *
+     * @param dates Reservation dates
+     * @return Best rated hotel
+     */
+    public String findBestRatedHotel(LocalDate... dates) {
+
+        Hotel bestRatedHotel = null;
+
+        // Iterate through all hotels
+        for (Hotel hotel : hotelList) {
+
+            // Select hotel with highest rating
+            if (bestRatedHotel == null ||
+                    hotel.getRating() > bestRatedHotel.getRating()) {
+
+                bestRatedHotel = hotel;
+            }
+        }
+
+        return bestRatedHotel.getHotelName()
+                + ", Rating: "
+                + bestRatedHotel.getRating();
+    }
 }

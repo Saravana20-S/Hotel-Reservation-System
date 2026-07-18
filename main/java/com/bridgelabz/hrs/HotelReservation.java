@@ -22,7 +22,7 @@ public class HotelReservation {
         service.addHotel(new Hotel("Bridgewood", 150, 50, 4));
         service.addHotel(new Hotel("Ridgewood", 220, 150, 5));
 
-        String result = service.findCheapestHotel(
+        String result = service.findBestRatedHotel(
                 LocalDate.of(2020, 9, 11),
                 LocalDate.of(2020, 9, 12)
         );
